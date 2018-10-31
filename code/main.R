@@ -52,9 +52,9 @@ outFile = "output.txt"
 
 
 cat("Settings: p, q, gamma, alpha, beta = ", c(p, q, gamma, alpha, beta), "\n")
-cat("Settings: p, q, gamma, alpha, beta = ", c(p, q, gamma, alpha, beta), "\n", sep = " ", file = outFile, append = TRUE)
+#cat("Settings: p, q, gamma, alpha, beta = ", c(p, q, gamma, alpha, beta), "\n", sep = " ", file = outFile, append = TRUE)
 cat("          N, M, B, H, D", c(N, M, B, H, D), "\n")
-cat("          N, M, B, H, D", c(N, M, B, H, D), "\n", sep = " ", file = outFile, append = TRUE)
+#cat("          N, M, B, H, D", c(N, M, B, H, D), "\n", sep = " ", file = outFile, append = TRUE)
 
 time = proc.time()
 results = EM_parallel (Y, t_obs, B, process = "ER", thr, init = init, D = D, MaxIter = MaxIter, 
