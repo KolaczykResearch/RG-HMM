@@ -1,0 +1,7 @@
+*.o*
+*.po*
+.D*
+.R*
+.idea
+*.txt
+*.Rout
