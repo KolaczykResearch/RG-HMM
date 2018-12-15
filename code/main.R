@@ -5,10 +5,10 @@ source("EMParallel.R")
 # Set parameters
 # ===============================================
 set.seed(102212)
-M = 10
+M = 5
 N = 50
-p = 0.7; q = 0.3; gamma = 10; alpha = 0.03; beta = 0.02
-rate_obs = 5
+p = 0.7; q = 0.3; gamma = 5; alpha = 0.03; beta = 0.02
+rate_obs = 2.5
 
 # ===============================================
 # Generate synthetic data
@@ -34,9 +34,9 @@ set.seed(1022)
 Y = net_obs_noise
 # init = c(0.7, 0.3, 2, 0.3, 0.2)
 init = c(p, q, gamma, alpha, beta)
-B = 500
+B = 50000
 thr = 1e-1
-D = 200
+D = 100
 H = 100
 burnIn = ceiling(0.1*M); phi = B*0.9
 MaxIter = 30
@@ -47,6 +47,7 @@ MHParallel = T; # clusterSizeMH = 3
 
 cat("Settings: p, q, gamma, alpha, beta = ", c(p, q, gamma, alpha, beta), "\n")
 cat("          N, M, B, H, D = ", c(N, M, B, H, D), "\n")
+cat("          rate_obs = ", rate_obs, "\n")
 
 time = proc.time()
 results = EM_parallel (Y, t_obs, B, process = "ER", thr, init = init, D = D, MaxIter = MaxIter, 
