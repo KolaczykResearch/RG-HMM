@@ -127,7 +127,7 @@ get_SimSeq_all = function(p, q, gamma, N, t_obs, net_start=NULL, w_start=NULL, p
     
     ###--Add edge if w_nex=1, delete edge if w_nex=0
     network_nex = network_change(network_cur, w_nex, N, process=process)
-
+    
     ##--Update network_seq_hidden
     network_seq_hidden[[count_hidden+1]] = network_nex
     count_hidden = count_hidden + 1
@@ -147,12 +147,14 @@ get_SimSeq_all = function(p, q, gamma, N, t_obs, net_start=NULL, w_start=NULL, p
     #check if t_obs[1] needs be updated as network_nex after transitioning when t_obs is not empty  
     if (length(t_obs)!=0 & t_obs[1]==t){
       network_seq_obs[[m+1]] = network_nex
+      bin_var_obs = c(bin_var_obs, w_nex)
       m = m + 1
       t_obs = t_obs[-1]
     }
     
     ###--Update network_cur
     network_cur = network_nex
+    w_cur = w_nex
   }
   return (list(network_seq_obs = network_seq_obs, network_seq_hidden = network_seq_hidden,
                t_transition=t_transition, 
@@ -186,7 +188,7 @@ get_SimSeq = function(p, q, gamma, N, t_obs, net_start=NULL, w_start=NULL, proce
   }
   t = 0
   m = 0
-
+  
   while (m<M){
     ###--Get w_nex ~ Bernoulli (p)/Bernoulli (1-q)
     w_nex = get_w_nex(w_cur, network_cur, p, q)
@@ -213,12 +215,14 @@ get_SimSeq = function(p, q, gamma, N, t_obs, net_start=NULL, w_start=NULL, proce
     #check if t_obs[1] needs be updated as network_nex after transitioning when t_obs is not empty  
     if (length(t_obs)!=0 & t_obs[1]==t){
       network_seq_obs[[m+1]] = network_nex
+      bin_var_obs = c(bin_var_obs, w_nex)
       m = m + 1
       t_obs = t_obs[-1]
     }
     
     ###--Update network_cur
     network_cur = network_nex
+    w_cur = w_nex
   }
   return (list(network_seq_obs = network_seq_obs, bin_var_obs = bin_var_obs))
 }
