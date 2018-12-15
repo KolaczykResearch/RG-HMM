@@ -1,5 +1,5 @@
 source("utilities.R")
-source("probFunc.R")
+source("prob_fun.R")
 
 #return the shortest path that brings y1,w1 to y2,w2
 #w1 is actually redundant input 
