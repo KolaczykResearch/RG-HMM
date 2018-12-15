@@ -24,7 +24,7 @@ particleFil = function (B, Y, t_obs, p, q, gamma, alpha, beta, process = "ER"){
   M = length(t_obs)
   W = matrix(0, B, M) # each row is the seq of binary var at t_obs
   W[,1] = rep(1, B) # set binary var to be 1 at the first obs. moments
-
+  
   # create B particles at each t_obs, store sequential particles at t_obs in a list 
   # particles is a list of list, particles[[1]],...,particles[[B]]
   particles = array(list(), B)
@@ -67,7 +67,7 @@ particleFil = function (B, Y, t_obs, p, q, gamma, alpha, beta, process = "ER"){
 # particles = particlesRes$particles
 # W=particlesRes$W
 # particles[[1]]
-## W
+# W
 
 #wrapper funciton of particleFil for parallelization
 particleFil_parallel = function (B, Y, t_obs, p, q, gamma, alpha, beta, process = "ER"){
@@ -105,8 +105,8 @@ particleFil_parallel = function (B, Y, t_obs, p, q, gamma, alpha, beta, process 
                            particles, label, W, t_obs, p, q, gamma, B, m, N)
     #portion = B/clusterSize
     for (cl in 1:B){
-        particles[[cl]][[m]] = results[[cl]]$part
-        W[cl, m] = results[[cl]]$W
+      particles[[cl]][[m]] = results[[cl]]$part
+      W[cl, m] = results[[cl]]$W
     }
     stopCluster(cluster)
   }
