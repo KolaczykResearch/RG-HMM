@@ -4,10 +4,10 @@ source("EMParallel.R")
 # ===============================================
 # Set parameters
 # ===============================================
-set.seed(1022)
+set.seed(102212)
 M = 10
-N = 5
-p = 0.7; q = 0.3; gamma = 10; alpha = 0.3; beta = 0.2
+N = 50
+p = 0.7; q = 0.3; gamma = 10; alpha = 0.03; beta = 0.02
 rate_obs = 5
 
 # ===============================================
@@ -37,10 +37,10 @@ init = c(p, q, gamma, alpha, beta)
 B = 500
 thr = 1e-1
 D = 200
-H = 10
-burnIn = ceiling(0.2*M); phi = B*0.9
+H = 100
+burnIn = ceiling(0.1*M); phi = B*0.9
 MaxIter = 30
-prop_max = 40
+prop_max = 10
 particleParallel = F; # clusterSizePF = 3
 MHParallel = T; # clusterSizeMH = 3
 # outFile = "output.txt"

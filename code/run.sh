@@ -10,7 +10,7 @@
 # #$ -pe omp 28
 # #$ -l mem_per_core=18G
 
-# #$ -pe omp 36
+#$ -pe omp 4
 
 module load R/3.5.0
 #R CMD BATCH main.R
