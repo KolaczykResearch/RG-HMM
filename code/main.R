@@ -45,6 +45,7 @@ particleParallel = F; # clusterSizePF = 3
 MHParallel = T; # clusterSizeMH = 3
 # outFile = "output.txt"
 
+cat("========================================================================")
 cat("Settings: p, q, gamma, alpha, beta = ", c(p, q, gamma, alpha, beta), "\n")
 cat("          N, M, B, H, D = ", c(N, M, B, H, D), "\n")
 cat("          rate_obs = ", rate_obs, "\n")
