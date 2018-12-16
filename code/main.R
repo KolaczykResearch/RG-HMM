@@ -5,10 +5,10 @@ source("EMParallel.R")
 # Set parameters
 # ===============================================
 set.seed(102212)
-M = 5
+M = 100
 N = 50
-p = 0.7; q = 0.3; gamma = 5; alpha = 0.03; beta = 0.02
-rate_obs = 2.5
+p = 0.7; q = 0.3; gamma = 10; alpha = 0.03; beta = 0.01
+rate_obs = 5
 
 # ===============================================
 # Generate synthetic data
@@ -40,7 +40,7 @@ D = 100
 H = 100
 burnIn = ceiling(0.1*M); phi = B*0.9
 MaxIter = 30
-prop_max = 10
+prop_max = 50
 particleParallel = F; # clusterSizePF = 3
 MHParallel = T; # clusterSizeMH = 3
 # outFile = "output.txt"
