@@ -41,7 +41,7 @@ H = 100
 burnIn = ceiling(0.1*M); phi = B*0.9
 MaxIter = 30
 prop_max = 50
-particleParallel = F; # clusterSizePF = 3
+particleParallel = T; # clusterSizePF = 3
 MHParallel = T; # clusterSizeMH = 3
 # outFile = "output.txt"
 

@@ -3,7 +3,7 @@
 #$ -P sand            # Set SCC project
 # #$ -l h_rt=72:00:00   # Specify the hard time limit for the job
 #$ -l h_rt=168:00:00
-#$ -N myjob_6           # Give job a name
+#$ -N myjob_7           # Give job a name
 #$ -j y               # Merge the error and output streams into a single file
 
 # Request a whole processor node of 28 cores with at least 512 GB of RAM
