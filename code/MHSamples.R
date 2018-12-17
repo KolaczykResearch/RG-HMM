@@ -406,6 +406,7 @@ getSamplePath = function(D, y1, w1, y2, w2, t1, t2, p, q, gamma, process = "ER",
 
 getSamplePath_nonparallel = function(m, D, Y_true, W_true, t_obs, p_cur, q_cur,
 gamma_cur, process = "ER", prop_max, burnIn_mcmc = 0){
+    cat(m, "..")
     M = length(t_obs)
     sum_01 = 0
     sum_0 = 0
