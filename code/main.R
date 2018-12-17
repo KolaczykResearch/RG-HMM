@@ -5,10 +5,10 @@ source("EMParallel.R")
 # Set parameters
 # ===============================================
 set.seed(102212)
-M = 100
+M = 60
 N = 50
-p = 0.7; q = 0.3; gamma = 10; alpha = 0.03; beta = 0.01
-rate_obs = 5
+p = 0.7; q = 0.3; gamma = 3; alpha = 0.03; beta = 0.01
+rate_obs = 1
 
 # ===============================================
 # Generate synthetic data
@@ -30,19 +30,19 @@ t_all = data$t_all # all transitioning time points
 # ===============================================
 # Run EM on synthetic data
 # ===============================================
-set.seed(1022)
+set.seed(10221211)
 Y = net_obs_noise
 # init = c(0.7, 0.3, 2, 0.3, 0.2)
 init = c(p, q, gamma, alpha, beta)
 B = 50000
 thr = 1e-1
 D = 100
-H = 100
-burnIn = ceiling(0.1*M); phi = B*0.9
+H = 1000
+burnIn = ceiling(0.5*M); phi = B*0.9
 burnIn_mcmc = ceiling(0.3*D)
 MaxIter = 30
 prop_max = 50
-particleParallel = T; # clusterSizePF = 3
+particleParallel = F; # clusterSizePF = 3
 MHParallel = T; # clusterSizeMH = 3
 # outFile = "output.txt"
 
