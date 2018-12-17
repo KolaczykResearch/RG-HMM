@@ -146,7 +146,7 @@ particleParallel = FALSE, MHParallel = FALSE, burnIn_mcmc = 0){
         if(MHParallel){
             cat("   Sampling MH paths for b = ...\n   ")
             clusterSize = as.numeric(Sys.getenv("NSLOTS"))
-            if (is.na(clusterSize)) clusterSize = 2
+            if (is.na(clusterSize)) clusterSize = 1
             #initialize a cluster for parallel computing
             cluster = makeCluster(clusterSize, type = "SOCK")
             #sample D paths that connects Y_true, W_true
