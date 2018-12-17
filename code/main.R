@@ -39,20 +39,22 @@ thr = 1e-1
 D = 100
 H = 100
 burnIn = ceiling(0.1*M); phi = B*0.9
+burnIn_mcmc = ceiling(0.3*D)
 MaxIter = 30
 prop_max = 10
 particleParallel = F; # clusterSizePF = 3
 MHParallel = T; # clusterSizeMH = 3
 # outFile = "output.txt"
 
-cat("========================================================================")
+cat("========================================================================\n")
 cat("Settings: p, q, gamma, alpha, beta = ", c(p, q, gamma, alpha, beta), "\n")
 cat("          N, M, B, H, D = ", c(N, M, B, H, D), "\n")
 cat("          rate_obs = ", rate_obs, "\n")
+cat("          burnIn, burnIn_mcmc = ", c(burnIn, burnIn_mcmc), "\n")
 
 time = proc.time()
 results = EM_parallel (Y, t_obs, B, process = "ER", thr, init = init, D = D, MaxIter = MaxIter, 
-                       prop_max = prop_max, burnIn, phi, H, particleParallel, MHParallel)
+                       prop_max = prop_max, burnIn, phi, H, particleParallel, MHParallel, burnIn_mcmc)
 time_used = proc.time() - time
 # time_used
 
@@ -61,7 +63,7 @@ cat("Time elapsed:", time_used[3],"\n")
 cat("Initialization:", init, "\n")
 cat("Truth:", c(p, q, gamma, alpha, beta), "\n")
 cat("Settings: (N, M, B, H, D)", c(N, M, B, H, D), "\n")
-cat("(thr, burnIn, phi, MaxIter):", c(thr, burnIn, phi, MaxIter), "\n")
+cat("(thr, burnIn, burnIn_mcmc, phi, MaxIter):", c(thr, burnIn, burnIn_mcmc, phi, MaxIter), "\n")
 cat("(particleParallel, clusterSizePF):", c(particleParallel, as.numeric(Sys.getenv("NSLOTS"))), "\n")
 cat("MHParallel, clusterSizeMH):", c(MHParallel, as.numeric(Sys.getenv("NSLOTS"))), "\n")
 cat("estimation(p,q,gamma,alpha,beta): \n", results$estimation, "\n")

@@ -404,21 +404,18 @@ getSamplePath = function(D, y1, w1, y2, w2, t1, t2, p, q, gamma, process = "ER",
     rate_accept = rate_accept))
 }
 
-getSamplePath_parallel = function(processID, D, Y_true, W_true, t_obs, p_cur, q_cur,
-gamma_cur, process = "ER", prop_max){
-    source("MHSamples.R")
+getSamplePath_nonparallel = function(m, D, Y_true, W_true, t_obs, p_cur, q_cur,
+gamma_cur, process = "ER", prop_max, burnIn_mcmc = 0){
     M = length(t_obs)
     sum_01 = 0
     sum_0 = 0
     sum_10 = 0
     sum_1 = 0
     sum_R = 0
-    
-    m = processID + 1
-    MHsamples = getSamplePath(D, y1 = Y_true[[m-1]], w1 = W_true[m-1], y2 = Y_true[[m]], w2 = W_true[m],
-    t1 = t_obs[m-1], t2 = t_obs[m], p_cur, q_cur, gamma_cur,
+    MHsamples = getSamplePath(D, y1 = Y_true[[m]], w1 = W_true[m], y2 = Y_true[[m+1]], w2 = W_true[m+1],
+    t1 = t_obs[m], t2 = t_obs[m+1], p_cur, q_cur, gamma_cur,
     process = "ER", prop_max = prop_max)
-    for (d in 1:D){
+    for (d in (burnIn_mcmc+1):D){
         counts = getCount(MHsamples$binSeq_path_D[[d]])
         sum_01 = sum_01 + counts[1]
         sum_0 = sum_0 + counts[2]
@@ -429,10 +426,70 @@ gamma_cur, process = "ER", prop_max){
     return (c(sum_01, sum_0, sum_10, sum_1, sum_R))
 }
 
+getSamplePath_parallel = function(processID, D, partic, t_obs, p_cur, q_cur,
+gamma_cur, process = "ER", prop_max, ids, burnIn = 0, burnIn_mcmc = 0){
+    source("MHSamples.R")
+    M = length(t_obs)
+    sum_01 = 0
+    sum_0 = 0
+    sum_10 = 0
+    sum_1 = 0
+    sum_R = 0
+    m = processID %% (M-1-burnIn)
+    h = processID %/% (M-1-burnIn) + 1
+    if (m == 0){
+        m = M - 1 - burnIn
+        h = h - 1
+        cat("  ", h, "...")
+    }
+    b = ids[h]
+    Y_true = partic$particles[[b]]
+    W_true = partic$W[b,]
+    m = m + burnIn
+    MHsamples = getSamplePath(D, y1 = Y_true[[m]], w1 = W_true[m], y2 = Y_true[[m+1]], w2 = W_true[m+1],
+    t1 = t_obs[m], t2 = t_obs[m+1], p_cur, q_cur, gamma_cur,
+    process = "ER", prop_max = prop_max)
+    for (d in (burnIn_mcmc+1):D){
+        counts = getCount(MHsamples$binSeq_path_D[[d]])
+        sum_01 = sum_01 + counts[1]
+        sum_0 = sum_0 + counts[2]
+        sum_10 = sum_10 + counts[3]
+        sum_1 = sum_1 + counts[4]
+        sum_R = sum_R + counts[5]
+    }
+    return (c(sum_01, sum_0, sum_10, sum_1, sum_R))
+}
+
+# getSamplePath_parallel = function(processID, D, Y_true, W_true, t_obs, p_cur, q_cur,
+#                                   gamma_cur, process = "ER", prop_max){
+#   source("MHSamples.R")
+#   M = length(t_obs)
+#   sum_01 = 0
+#   sum_0 = 0
+#   sum_10 = 0
+#   sum_1 = 0
+#   sum_R = 0
+#   m = processID + 1
+#   MHsamples = getSamplePath(D, y1 = Y_true[[m-1]], w1 = W_true[m-1], y2 = Y_true[[m]], w2 = W_true[m],
+#                             t1 = t_obs[m-1], t2 = t_obs[m], p_cur, q_cur, gamma_cur,
+#                             process = "ER", prop_max = prop_max)
+#   for (d in 1:D){
+#     counts = getCount(MHsamples$binSeq_path_D[[d]])
+#     sum_01 = sum_01 + counts[1]
+#     sum_0 = sum_0 + counts[2]
+#     sum_10 = sum_10 + counts[3]
+#     sum_1 = sum_1 + counts[4]
+#     sum_R = sum_R + counts[5]
+#   }
+#   return (c(sum_01, sum_0, sum_10, sum_1, sum_R))
+# }
+
+
 # get count statistics from a series of MH samples
 getCount = function(binSeq_path_D){
     len = length(binSeq_path_D)
-    sum_R = len - 2
+    # sum_R = len - 2
+    sum_R = len - 1
     sum_1 = sum(binSeq_path_D[1:(len-1)])
     sum_0 = len - 1 - sum_1
     diff = binSeq_path_D[1:(len-1)] - binSeq_path_D[2:len]
