@@ -5,10 +5,10 @@ source("EMParallel.R")
 # Set parameters
 # ===============================================
 set.seed(102212)
-M = 60
+M = 10
 N = 50
-p = 0.7; q = 0.3; gamma = 3; alpha = 0.03; beta = 0.01
-rate_obs = 1
+p = 0.7; q = 0.3; gamma = 2; alpha = 0.03; beta = 0.01
+rate_obs = 0.6
 
 # ===============================================
 # Generate synthetic data

@@ -127,7 +127,7 @@ get_SimSeq_all = function(p, q, gamma, N, t_obs, net_start=NULL, w_start=NULL, p
     
     ###--Add edge if w_nex=1, delete edge if w_nex=0
     network_nex = network_change(network_cur, w_nex, N, process=process)
-    
+
     ##--Update network_seq_hidden
     network_seq_hidden[[count_hidden+1]] = network_nex
     count_hidden = count_hidden + 1
@@ -188,7 +188,7 @@ get_SimSeq = function(p, q, gamma, N, t_obs, net_start=NULL, w_start=NULL, proce
   }
   t = 0
   m = 0
-  
+
   while (m<M){
     ###--Get w_nex ~ Bernoulli (p)/Bernoulli (1-q)
     w_nex = get_w_nex(w_cur, network_cur, p, q)

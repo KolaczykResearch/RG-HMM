@@ -92,7 +92,8 @@ getPathProb =  function (netSeq_path, binSeq_path, t1,t2, p, q, gamma){
     s1 = netSeq_path[-1]
     v1 = binSeq_path[-1]
     R1 = M-1
-    loglik = (-1)*gamma*(t2-t1)+R1*log(gamma*(t2-t1))-log(factorial(R1))
+    # loglik = (-1)*gamma*(t2-t1)+R1*log(gamma*(t2-t1))-log(factorial(R1))
+    loglik = dpois(R1, gamma*(t2-t1), log = T)
     for (r in 2:(R1+1)){
         loglik = loglik + log_g(y2=netSeq_path[[r]], w2=binSeq_path[[r]], y1=netSeq_path[[r-1]]) +
         log_h(w2=binSeq_path[[r]],y1=netSeq_path[[r-1]],w1=binSeq_path[[r-1]],p,q)
