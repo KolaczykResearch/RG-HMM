@@ -1,25 +1,26 @@
 source("DataSet.R")
-source("EMParallel.R")
+source("EMParallel2.R")
 
 # ===============================================
 # Set parameters
 # ===============================================
-set.seed(102212)
-M = 100
-N = 30
+set.seed(10221211)
+M = 50
+N = 20
 p = 0.7; q = 0.3; gamma = 2; alpha = 0.03; beta = 0.01
 rate_obs = 0.6
+process = "ER"
 
 # ===============================================
 # Generate synthetic data
 # ===============================================
 param_val = c(p, q, gamma, alpha, beta)
-data = DataSet (N, M, param_val, rate_obs, process = "ER")
+data = DataSet (N, M, param_val, rate_obs, process = process)
 
 # Data observed
 t_obs = data$t_obs # observation moments
 net_obs_noise = data$net_obs_noise # observed networks with noise
- 
+
 # Ground truth in hidden layer
 net_obs = data$net_obs # true networks at observational moments 
 bin_obs = data$bin_obs # binary variables at observational moments
@@ -30,20 +31,20 @@ t_all = data$t_all # all transitioning time points
 # ===============================================
 # Run EM on synthetic data
 # ===============================================
-set.seed(10221211)
+#set.seed(10221211)
 Y = net_obs_noise
-# init = c(0.7, 0.3, 2, 0.3, 0.2)
 init = c(p, q, gamma, alpha, beta)
+# init = c(0.1, 0.1, 1, 0.01, 0.01)
 B = 50000
 thr = 1e-1
 D = 10
-H = 1000
+H = 10
 burnIn = ceiling(0.0*M); phi = B*0.9
 burnIn_mcmc = ceiling(0.0*D)
 MaxIter = 30
 prop_max = 50
 particleParallel = F; # clusterSizePF = 3
-MHParallel = T; # clusterSizeMH = 3
+MHParallel = F; # clusterSizeMH = 3
 # outFile = "output.txt"
 
 cat("========================================================================\n")
@@ -68,4 +69,3 @@ cat("(particleParallel, clusterSizePF):", c(particleParallel, as.numeric(Sys.get
 cat("MHParallel, clusterSizeMH):", c(MHParallel, as.numeric(Sys.getenv("NSLOTS"))), "\n")
 cat("estimation(p,q,gamma,alpha,beta): \n", results$estimation, "\n")
 cat("iteration:\n", results$iteration, "\n")
-
