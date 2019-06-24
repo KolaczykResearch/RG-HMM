@@ -4,12 +4,12 @@ source("EMParallel2.R")
 # ===============================================
 # Set parameters
 # ===============================================
-#set.seed(102212)
+set.seed(10221211)
 M = 50
-N = 50
-p = 0.9; q = 0.1; gamma = 2; alpha = 0.005; beta = 0.01
+N = 20
+p = 0.7; q = 0.3; gamma = 2; alpha = 0.03; beta = 0.01
 rate_obs = 0.6
-process = "PR"
+process = "ER"
 
 # ===============================================
 # Generate synthetic data
@@ -33,8 +33,8 @@ t_all = data$t_all # all transitioning time points
 # ===============================================
 #set.seed(10221211)
 Y = net_obs_noise
-init = c(p, q, gamma, alpha, beta)
-# init = c(0.1, 0.1, 1, 0.01, 0.01)
+# init = c(p, q, gamma, alpha, beta)
+init = c(0.1, 0.1, 1, 0.01, 0.01)
 B = 50000
 thr = 1e-1
 D = 10
@@ -46,6 +46,9 @@ prop_max = 50
 particleParallel = F; # clusterSizePF = 3
 MHParallel = F; # clusterSizeMH = 3
 # outFile = "output.txt"
+
+cat("=======================")
+cat("Estimate with ER process...")
 
 cat("========================================================================\n")
 cat("Settings: p, q, gamma, alpha, beta = ", c(p, q, gamma, alpha, beta), "\n")
@@ -60,6 +63,7 @@ time_used = proc.time() - time
 # time_used
 
 cat("%%%%%%%%%%%% RESULTS %%%%%%%%%%%%:\n")
+cat(process, "Estimate with ER process...")
 cat("Time elapsed:", time_used[3],"\n")
 cat("Initialization:", init, "\n")
 cat("Truth:", c(p, q, gamma, alpha, beta), "\n")
@@ -71,14 +75,15 @@ cat("estimation(p,q,gamma,alpha,beta): \n", results$estimation, "\n")
 cat("iteration:\n", results$iteration, "\n")
 
 cat("=======================")
-cat("Estimate with ER process...")
+cat("Estimate with PR process...")
 time = proc.time()
-results = EM_parallel (Y, t_obs, B, process = "ER", thr, init = init, D = D, MaxIter = MaxIter,
+results = EM_parallel (Y, t_obs, B, process = "PR", thr, init = init, D = D, MaxIter = MaxIter,
                        prop_max = prop_max, burnIn, phi, H, particleParallel, MHParallel, burnIn_mcmc)
 time_used = proc.time() - time
 # time_used
 
 cat("%%%%%%%%%%%% RESULTS %%%%%%%%%%%%:\n")
+cat(process, "Estimate with PR process...")
 cat("Time elapsed:", time_used[3],"\n")
 cat("Initialization:", init, "\n")
 cat("Truth:", c(p, q, gamma, alpha, beta), "\n")
