@@ -43,8 +43,6 @@ network_change = function(network_cur, w_nex, N, process="ER"){
     }
   }else if (process == "PR"){
       network_nex = network_cur
-      # igraph_cur = graph_from_adjacency_matrix(network_cur, mode = "undirected")
-      # clusters = clusters(igraph_cur)
       if (w_nex == 1){
         cand_two = sample_modified(which(network_cur ==0 & upper.tri(network_cur)), 2)
         vertices = productRuleCC(cand_two[1], cand_two[2], network_cur, N, w_nex) 
@@ -124,9 +122,6 @@ get_SimSeq_all = function(p, q, gamma, N, t_obs, net_start=NULL, w_start=NULL, p
     # number of time points to be updated as network_cur before transitioning
     num = sum(t_obs<t) 
     if (num > 0){
-      # for (i in 1:num){
-      #   network_seq_obs[[m+i]] = network_cur
-      # }
       network_seq_obs = c(network_seq_obs, lapply(1:num, function(i) network_cur))
       bin_var_obs = c(bin_var_obs, rep(w_cur, num))
       m = m + num
@@ -192,9 +187,6 @@ get_SimSeq = function(p, q, gamma, N, t_obs, net_start=NULL, w_start=NULL, proce
     # number of time points to be updated as network_cur before transitioning
     num = sum(t_obs<t) 
     if (num > 0){
-      # for (i in 1:num){
-      #   network_seq_obs[[m+i]] = network_cur
-      # }
       network_seq_obs = c(network_seq_obs, lapply(1:num, function(i) network_cur))
       bin_var_obs = c(bin_var_obs, rep(w_cur, num))
       m = m + num
@@ -227,38 +219,6 @@ get_SimSeq = function(p, q, gamma, N, t_obs, net_start=NULL, w_start=NULL, proce
 # net_seq_obs_noise: Observed network sequence with noise, i.e. a list of M elements, 
 #                         each containing N tims N adjacency matrix.
 #---------------------------------------------
-# add_Noise = function(net_obs, alpha, beta){
-#   N = nrow(net_obs[[1]])
-#   pos =0
-#   for (i in 1:length(net_obs)){
-#     #among all nonedges, make alpha% of them edge
-#     nonedge = get_triangular(which(net_obs[[i]] == 0), N)
-#     temp = floor(length(nonedge)*alpha)
-#     #temp = ceiling(length(nonedge)*alpha)
-#     tochange = sample_modified(nonedge, temp)
-#     if(length(tochange)!=0){
-#       for (j in 1:length(tochange)){
-#         pos = get_pos(tochange[j], N)
-#         net_obs[[i]][pos[2],pos[1]] = 1
-#         net_obs[[i]][pos[1],pos[2]] = 1
-#       }
-#     }
-#     #among all edges, make beta% of them nonedges
-#     edge = get_triangular(which(net_obs[[i]] == 1), N)
-#     temp = floor(length(edge)*beta)
-#     #temp = ceiling(length(edge)*beta)
-#     tochange = sample_modified(edge, temp)
-#     if(length(tochange)!=0){
-#       for (j in 1:length(tochange)){
-#         pos = get_pos(tochange[j], N)
-#         net_obs[[i]][pos[2],pos[1]] = 0
-#         net_obs[[i]][pos[1],pos[2]] = 0
-#       }
-#     }
-#   }
-#   return(net_obs)
-# }
-
 add_Noise = function(net_obs, alpha, beta){
   N = nrow(net_obs[[1]])
   pos =0
@@ -291,7 +251,6 @@ add_Noise = function(net_obs, alpha, beta){
 network_change2 = function(network_cur, w_nex, N, process="ER", edgeIndex){
   #edgeIndex = matrix(1:(N^2), N, N)[upper.tri(matrix(1:(N^2), N, N))]
   if (process == "ER"){
-    #network_nex = network_cur
     if (w_nex == 1){
       pos = sample_modified(setdiff(edgeIndex, network_cur), 1)
       network_nex = c(network_cur, pos)
@@ -302,18 +261,14 @@ network_change2 = function(network_cur, w_nex, N, process="ER", edgeIndex){
   }else if (process == "PR"){
     network_cur = format_back(network_cur, N)
     network_nex = network_cur
-    # igraph_cur = graph_from_adjacency_matrix(network_cur, mode = "undirected")
-    # clusters = clusters(igraph_cur)
     if (w_nex == 1){
       cand_two = sample_modified(which(network_cur ==0 & upper.tri(network_cur)), 2)
-      # vertices = productRuleCC(cand_two[1], cand_two[2], clusters, N, w_nex) 
-      vertices = productRuleCC(cand_two[1], cand_two[2], network_cur, N, w_nex) 
+      vertices = productRuleCC(cand_two[1], cand_two[2], network_cur, N, w_nex)
       network_nex[vertices[1], vertices[2]] = 1 
       network_nex[vertices[2], vertices[1]] = 1 
     }else{
       cand_two = sample_modified(which(network_cur ==1 & upper.tri(network_cur)), 2)
-      # vertices = productRuleCC(cand_two[1], cand_two[2], clusters, N, w_nex) 
-      vertices = productRuleCC(cand_two[1], cand_two[2], network_cur, N, w_nex) 
+      vertices = productRuleCC(cand_two[1], cand_two[2], network_cur, N, w_nex)
       network_nex[vertices[1], vertices[2]] = 0
       network_nex[vertices[2], vertices[1]] = 0
     }
@@ -374,9 +329,6 @@ get_SimSeq2 = function(p, q, gamma, N, t_obs, net_start=NULL, w_start=NULL, proc
     # number of time points to be updated as network_cur before transitioning
     num = sum(t_obs<t) 
     if (num > 0){
-      # for (i in 1:num){
-      #   network_seq_obs[[m+i]] = network_cur
-      # }
       network_seq_obs = c(network_seq_obs, lapply(1:num, function(i) network_cur))
       bin_var_obs = c(bin_var_obs, rep(w_cur, num))
       m = m + num
