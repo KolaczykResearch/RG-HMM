@@ -110,7 +110,7 @@ Simulation results in the Supplement similar to Figure 8-9 and Table 4 can be re
 
 ### To reproduce application results (Section 6 in paper)
 
-Data used in the section are network time series constructed from the brain voltage recordings on epileptic seizures. The code we used for network construction is from https://github.com/Mark-Kramer/dppm. `ApplicationSeizure/ConstFunNets` contains the specific portion of code we used from network construction in this project. 
+Data used in the section are network time series constructed from the brain voltage recordings on epileptic seizures. The code we used for network construction is from https://github.com/Mark-Kramer/dppm. `ApplicationSeizure/ConstFunNets` contains the specific portion of code we used for network construction in this project. 
 
 #### Figure 10
 
