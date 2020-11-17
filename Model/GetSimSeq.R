@@ -285,62 +285,6 @@ add_Noise = function(net_obs, alpha, beta){
   return(net_obs)
 }
 
-
-# add_Noise = function(net_obs, alpha, beta){
-#   N = nrow(net_obs[[1]])
-#   pos =0
-#   for (i in 2:length(net_obs)){
-#     #among all nonedges, make alpha% of them edge
-#     nonedge = get_triangular(which(net_obs[[i]] == 0), N)
-#     #among all edges, make beta% of them nonedges
-#     edge = get_triangular(which(net_obs[[i]] == 1), N)
-#     
-#     bool = sample(c(TRUE, FALSE), length(nonedge), prob = c(alpha, 1-alpha), replace = TRUE)
-#     tochange = nonedge[bool]
-#     if(length(tochange)!=0){
-#       tochange1 = matrix(1:(N^2), N, N, byrow = TRUE)[tochange]
-#       net_obs[[i]][tochange] = 1
-#       net_obs[[i]][tochange1] = 1
-#     }
-# 
-#     bool = sample(c(TRUE, FALSE), length(edge), prob = c(beta, 1-beta), replace = TRUE)
-#     tochange = edge[bool]
-#     if(length(tochange)!=0){
-#       tochange1 = matrix(1:(N^2), N, N, byrow = TRUE)[tochange]
-#       net_obs[[i]][tochange] = 0
-#       net_obs[[i]][tochange1] = 0
-#     }
-#   }
-#   return(net_obs)
-# }
-
-
-# 
-# # ===========================================
-# # ===========================================
-# set.seed(7)
-# #random draw 10 time points uniformly from (0, 20)
-# t_obs = sort(runif(10,0,20))
-# N = 5
-# p = 0.7; q = 0.3; gamma = 2; alpha = 0.1; beta = 0.5
-# res = get_SimSeq_all(p, q, gamma, N, t_obs)
-# get_SimSeq(p, q, gamma, N, t_obs = 1)
-# net_obs = res$network_seq_obs
-# net_obs_noise = add_Noise(net_obs, alpha, beta)
-# bin_obs = res$bin_var_obs
-# t_all = res$t_transition
-# net_hidden = res$network_seq_hidden
-# bin_hidden = res$bin_var_hidden
-# 
-# t_obs # observation moments
-# net_obs_noise #observed networks with noise
-# 
-# net_obs # noise-free networks at observational moments
-# bin_obs # binary variable at observational moments
-# t_all # all the transitioning moments in the hidden layer
-# net_hidden # true networks at all transitioning moments in the hidden layer
-# bin_hidden # binary variable at all transitioning moments
-
 # Get network_nex by changing one edge (either add or delete determined by w_nex) 
 # in network_cur following process rules
 # network_cur is of list of edges form, not matrix form
@@ -454,3 +398,27 @@ get_SimSeq2 = function(p, q, gamma, N, t_obs, net_start=NULL, w_start=NULL, proc
   return (list(network_seq_obs = network_seq_obs, bin_var_obs = bin_var_obs))
 }
 
+# # ===========================================
+# # ===========================================
+# set.seed(7)
+# #random draw 10 time points uniformly from (0, 20)
+# t_obs = sort(runif(10,0,20))
+# N = 5
+# p = 0.7; q = 0.3; gamma = 2; alpha = 0.1; beta = 0.5
+# res = get_SimSeq_all(p, q, gamma, N, t_obs)
+# get_SimSeq(p, q, gamma, N, t_obs = 1)
+# net_obs = res$network_seq_obs
+# net_obs_noise = add_Noise(net_obs, alpha, beta)
+# bin_obs = res$bin_var_obs
+# t_all = res$t_transition
+# net_hidden = res$network_seq_hidden
+# bin_hidden = res$bin_var_hidden
+#
+# t_obs # observation moments
+# net_obs_noise #observed networks with noise
+#
+# net_obs # noise-free networks at observational moments
+# bin_obs # binary variable at observational moments
+# t_all # all the transitioning moments in the hidden layer
+# net_hidden # true networks at all transitioning moments in the hidden layer
+# bin_hidden # binary variable at all transitioning moments

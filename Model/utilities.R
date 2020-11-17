@@ -2,24 +2,6 @@
 #---------------------------------------------
 #get all indices for the upper triangular elements(diagonal elements excluded)
 #(NtimesN matrix) from an array of indices(seq)
-# get_triangular = function(seq, N){
-#   if(length(seq) ==0){
-#     return(NULL)
-#   }
-#   res = numeric(length(seq))
-#   ind = 1
-#   for (i in 1:length(seq)){
-#     col = ifelse(seq[i]%%N!=0, seq[i]%/%N + 1, seq[i]%/%N)
-#     row = ifelse(seq[i]%%N!=0, seq[i]%%N, N)
-#     if (col>row){
-#       res[ind] = seq[i]
-#       ind = ind + 1
-#     }
-#   }
-#   res = res[res!=0]
-#   return (res)
-# }
-
 get_triangular = function(seq, N){
     M = upper.tri(matrix(0, N, N))
     # return(seq[M[seq]])
@@ -81,26 +63,6 @@ nonedge_num = function(y1){
 
 #check whether it is adding or deleting edges from net1 to net2
 #return 1 if it is adding
-# checkAdding = function (net1, net2){
-#   #upper.tri() returns the indices
-#   uppder_tri_id = upper.tri(net1, diag = F)
-#   temp = (net2 - net1)[uppder_tri_id]
-#   #check if only one item in temp not equal to zero
-#   if (sum(temp!=0)!=1){
-#     warning("Infeasible Samples!")
-#     return(2)
-#   }
-#   #add = temp[temp !=0]
-#   add = (sum(temp) + 1)/2
-#   return (add)
-#   # if (add == 1){
-#   #   return (1)
-#   # }
-#   # if (add == (-1)){
-#   #   return (0)
-#   # }
-# }
-
 checkAdding = function (net1, net2){
     net0 = net2 - net1
     if (sum(abs(net0)) > 2){

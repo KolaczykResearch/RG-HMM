@@ -25,15 +25,6 @@ lse = function(ls){
 #the conditional prob. function of observed network given the true (log)
 #input: two matrices, type I/II errors
 #output: numeric value
-#getCondProb = function (observe, true, alpha, beta){
-#    countVec = getCounts_abcd (observe, true)
-#    a = countVec[1]
-#    b = countVec[2]
-#    c = countVec[3]
-#    d = countVec[4]
-#    loglik = c*log(alpha) + d*log(1-alpha)+ b*log(beta) + a*log(1-beta)
-#    return (loglik)
-#}
 getCondProb = function (observe, true, alpha, beta){
     countVec = getCounts_abcd (observe, true)
     a = countVec[1]
@@ -68,19 +59,6 @@ getCounts_abcd = function (observe, true){
 ###This is for METROPOLIS HASTINGS SAMPLES#########
 ##########################################
 #transition probability function log_f(y2,w2|y1,w1) = log_g(y2|w2,y1) + log_h(w2|y1,w1)
-
-#Conditional log pdf of y2 given w2, y1
-# log_g = function(y2,w2,y1){
-#   res = checkAdding(y1,y2)
-#   if (res == 1 & w2==1){
-#     lik = 1/nonedge_num(y1)
-#   }else if(res == 0 & w2==0){
-#     lik = 1/edge_num(y1)
-#   }else{
-#     lik = 0
-#   }
-#   return (log(lik))
-# }
 # assume feasible, log pdf of y2 given w2, y1 for ER process
 log_g_ER = function(y2, w2, y1){
     if (w2 == 1){
@@ -182,11 +160,6 @@ getPathProb =  function (netSeq_path, binSeq_path, t1,t2, p, q, gamma, process =
           log_h(w2=binSeq_path[[r]],y1=netSeq_path[[r-1]],w1=binSeq_path[[r-1]],p,q)
       }
     }
-    #######
-    # if (is.nan(loglik)){
-    #   loglik = -Inf
-    # }
-    #######
     return(loglik)
 }
 
@@ -229,8 +202,6 @@ h_prime_q = function(w2,y1,w1){
     }
     return (deriv)
 }
-
-
 
 #get score_m
 #input: netSeq_path from y1 to y2, binSeq_path from w1 to w2, parameters
@@ -305,12 +276,3 @@ get_score_m_natural = function(netSeq_path, binSeq_path, t1,t2, p, q, gamma){
     score_m_grad_natural[3] = score_m_grad[3]*(exp(gamma_til))^2 + score_m[3]*exp(gamma_til)
     return (c(score_m_natural, score_m_grad_natural))
 }
-
-
-
-##get expected observed data score function
-#getExpObdScore_obs = function()
-
-
-##get expected log-likelihood
-
