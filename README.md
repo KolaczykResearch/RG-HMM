@@ -38,6 +38,7 @@ All of the R scripts used in the paper are available in this repo. The MIT licen
 * `run_*.sh`: bash scripts for submitting above main files to run in parallel
 * `Simulations/`: directory to store ouput result scripts from .sh 
 * `ApplicationSeizure/`: contains code for network construction from ECoG, automatic segment finder
+* `generate_*.R`: scripts to reproduce figures in paper
 
 ### Optional Information
 
