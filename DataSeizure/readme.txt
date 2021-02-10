@@ -1,0 +1,1 @@
+Derived data (network time series) are available from the corresponding author on request (Email: xiaojzhu@ bu.edu). Deidentified data may be available upon request to the corresponding author with appropriate IRB approval.
