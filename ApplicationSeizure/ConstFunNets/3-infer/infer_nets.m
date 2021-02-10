@@ -23,8 +23,6 @@ if strcmp(cfg.infer.method ,'corr') || strcmp(cfg.infer.method, 'corr_0_lag') ==
     %----------------------------------------------------------
 
     % Assume variables:  d = data, t = time axis
-%     d = s.ECoG.Data;
-%     t = s.ECoG.Time;
     d = s.data;
     t = s.time;
     % fs = s.hdr.info.sfreq; 
@@ -49,20 +47,17 @@ if strcmp(cfg.infer.method ,'corr') || strcmp(cfg.infer.method, 'corr_0_lag') ==
     rho_net = NaN(size(d,2), size(d,2), i_total);
 
     parfor k=1:i_total                          %For each window,
-
-%                     nchar = fprintf(num2str(k))
-
-        t_start = t(1) + (k-1) * cfg.infer.windowstep; %#ok<PFBNS> %... get window start time [s],
+        t_start = t(1) + (k-1) * cfg.infer.windowstep;             %... get window start time [s],
         t_stop  = t_start + cfg.infer.windowsize;                  %... get window stop time [s],
         indices = t >= t_start & t < t_stop;                       %... find indices for window in t,
 
         % Build the functional networks.
         if cfg.infer.scale == "global"
-            [C,mx,lag,rho] = infer_network_correlation_analytic(d(indices,:), 'scale', scale); %#ok<PFBNS>
+            [C,mx,lag,rho] = infer_network_correlation_analytic(cfg.infer.fdr, d(indices,:), 'scale', scale); 
         elseif cfg.infer.scale == "win"
-            [C,mx,lag,rho] = infer_network_correlation_analytic(d(indices,:), 'scale', scale(k)); %#ok<PFBNS>
+            [C,mx,lag,rho] = infer_network_correlation_analytic(cfg.infer.fdr, d(indices,:), 'scale', scale(k)); 
         else
-            [C,mx,lag,rho] = infer_network_correlation_analytic(d(indices,:)); %#ok<PFBNS>
+            [C,mx,lag,rho] = infer_network_correlation_analytic(cfg.infer.fdr, d(indices,:)); 
         end
 
         if strcmp(cfg.infer.method, 'corr_0_lag') == 1 
@@ -82,10 +77,23 @@ if strcmp(cfg.infer.method ,'corr') || strcmp(cfg.infer.method, 'corr_0_lag') ==
 %                     fprintf(repmat('\b', 1, nchar));
     end
 
+    if strcmp(cfg.infer.thr, 'static')==1
+        % convert weighted networks into binary via static threshold
+        array = [];
+        bool_temp = triu(true(size(mx_net(:,:,1))), 1);
+        for i=find(t_net<=cfg.infer.szstart)
+            temp_mat = mx_net(:,:,i);
+            array = [array, temp_mat(bool_temp)];
+        end
+        thr = quantile(array, 0.99);
+        mx_net = permute(mx_net, [2,1,3]) + mx_net;
+        C_net = 1*(mx_net>thr);
+    end
+    
     nets.C   = C_net;
-    nets.mx  = mx_net;
-    nets.lag = lag_net;
-    nets.rho = rho_net;
+    %nets.mx  = mx_net;
+    %nets.lag = lag_net;
+    %nets.rho = rho_net;
     nets.t   = t_net;
 
 end
@@ -100,6 +108,7 @@ end
 % Save results in a different file
 save(netsdata_file, 'nets', 'cfg');
 % save(netsdata_file, 'nets', 'cfg', '-v7.3');
+fprintf(['... save netword data, ' netsdata_file '\n'])
 
 clear nets s;
 

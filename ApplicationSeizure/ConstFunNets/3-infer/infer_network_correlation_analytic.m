@@ -37,7 +37,7 @@
 % x. What's the best way to measure std of correlation (used to compute
 % p-value of max(abs(cc)))?
 
-function [C,mx,lag,rho] = infer_network_correlation_analytic(dgrid, varargin)
+function [C,mx,lag,rho] = infer_network_correlation_analytic(q_given, dgrid, varargin)
 
   %Define some useful variables.
   winSize = size(dgrid,1);          %The length of the data in time.
@@ -82,7 +82,7 @@ function [C,mx,lag,rho] = infer_network_correlation_analytic(dgrid, varargin)
   stdsij = squeeze(std(  sij(:,[(1:maxLags+1), ...      %Compute std over Fisher cc's.
                                 (end-maxLags+1:end)],:), [], 2));
   
-  if nargin==3 && strcmp(varargin{1}, 'scale')          %Check if using global (all time) scale.
+  if nargin==4 && strcmp(varargin{1}, 'scale')          %Check if using global (all time) scale.
   	  scale0 = varargin{2};
   else
       scale0 = nanmean(stdsij(up));                     %Compute avg std of Fisher cc's
@@ -129,7 +129,8 @@ function [C,mx,lag,rho] = infer_network_correlation_analytic(dgrid, varargin)
 %   %plot(ones(size(pvals))*0.05/length(pvals), 'r')
 %   hold off
   
-  q  = 0.05;
+  % q  = 0.05;
+  q = q_given;
   qs = (q*(1:length(pvals))/length(pvals))';
   i0 = find(pvals-qs <= 0); 
   if ~isempty(i0)

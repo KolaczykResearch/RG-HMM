@@ -1,4 +1,4 @@
-# Random Graph Hidden Markov Models for Percolation in Noisy Dynamic Networks with Application in Epileptic Seizures
+# Inferring the Type of Phase Transitions Undergone in Epileptic Seizures Using Random Graph Hidden Markov Models for Percolation in Noisy Dynamic Networks
 
 # Author Contributions Checklist Form
 
@@ -26,7 +26,7 @@ data\$nets[ , ,1]​\$C[, ,i] - the i-th observed network (adjacency matrix)
 
 ### Abstract
 
-Most of the data processing and analysis for this paper were done in R. This repo provides the corresponding code to conduct both the statistical simulation study and analyses on real data sets for the case studies. 
+Most of the data processing and analysis for this paper were done in R, and some in Matlab. This repo provides the corresponding code to conduct both the statistical simulation study and analyses on real data sets for the case studies. 
 
 ### Description
 
@@ -37,16 +37,24 @@ All of the R scripts used in the paper are available in this repo. The MIT licen
 * `main_test*.R`: main files for testing with both simulated and real data
 * `run_*.sh`: bash scripts for submitting above main files to run in parallel
 * `Simulations/`: directory to store ouput result scripts from .sh 
-* `ApplicationSeizure/`: contains code for network construction from ECoG, automatic segment finder
+* `ApplicationSeizure/`: contains code for network construction from ECoG data, automatic segment finder
+* `DataSeizure/`: directory to store ECoG data on seizures and constructed network time series
 * `generate_*.R`: scripts to reproduce figures in paper
 
 ### Optional Information
 
-R version 3.5.1 was used for the analyses in this paper. The necessary R libraries for the code used for data processing and analysis are: igraph (v0.4.3), snow (v0.4.3), lme4 (1.1.21), lmerTest (3.0.1), car (3.0.2), sjPlot (2.6.1), R.matlab (3.6.2), ggplot2 (3.1.1), gridExtra (2.3).
+R version 3.5.1 was used for the analyses in this paper. The necessary R libraries for the code used for data processing and analysis are: igraph (v0.4.3), snow (v0.4.3), lme4 (1.1.21), lmerTest (3.0.1), car (3.0.2), sjPlot (2.6.1), R.matlab (3.6.2), ggplot2 (3.1.1), gridExtra (2.3). 
 
-  
+Dependices for network construction and dynamic community tracking used in the real data analysis are 
+
+- [DPPM Toolbox](https://github.com/Eden-Kramer-Lab/dppm/tree/simplified) 
+- [The Brain Connectivity Toolbox](https://sites.google.com/site/bctnet/)
+- [Dynamic plex percolation method](https://github.com/nathanntg/dynamic-plex-propagation)
+
+
 
 ## Part 3: Reproducibility workflow
+
 The workflow to reproduce all Figures and Tables in the paper is provided as follows. 
 
 ### To reproduce simulation results (Section 5 in paper)
@@ -110,20 +118,28 @@ Simulation results in the Supplement similar to Figure 8-9 and Table 4 can be re
 
 ### To reproduce application results (Section 6 in paper)
 
-Data used in the section are network time series constructed from the brain voltage recordings on epileptic seizures. The code we used for network construction is from https://github.com/Mark-Kramer/dppm. `ApplicationSeizure/ConstFunNets` contains the specific portion of code we used for network construction in this project. 
+Data used in the section are network time series constructed from the brain voltage recordings on epileptic seizures. Testing on real seizure data involves the following steps:
+
+- Construct time series of functional networks: the code we used for network construction is from https://github.com/Mark-Kramer/dppm. `ApplicationSeizure/ConstFunNets` contains the specific portion of code we used for network construction in this project. The functional network time series can be constructed  from the ECoG data by running 
+
+  `ApplicationSeizure/ConstFunNets/main_const_fun_nets_hemisphere_bipolar.m`
+
+  The preprocessed voltage traces will be saved in *DataSeizure/prepdata_fdr*, and the constructed network time series will be saved in *DataSeizure/networks_fdr*.  
+
+- Track dynamic communities:  the code we used for tracking dynamic communities is from https://github.com/Eden-Kramer-Lab/dppm/tree/simplified. ROIs are identified by running
+
+  `ApplicationSeizure/ConstFunNets/main_track_communities.m`.
+
+- Identify ramp-up(s) in ROIs selected from the previous step for testing using automatic segment finder: run `ApplicationSeizure/auto_detect_curve_left_bipolar.R`.
 
 #### Figure 10
 
-Figure 10 is the density and gcc over time for one real seizure with segments detected for test in black color. The figure can be reproduced by running
+Figure 10 is the voltage traces, dynamic community membership, density and gcc over time for one real seizure with segments detected for test in bold. The figure can be reproduced by running
 
-`ApplicationSeizure/auto_detect_curve2_hemi_new_start.R`
+`ApplicationSeizure/main_track_communities_color_chosen_curves_sorted_plot.m`
 
 #### Table 5
 
-Table 5 is the testing results for the chosen segment, which can be obtained by running `main_test_seizure.R`. The results reported are mean and standard deviation based off 10 runs. Each run takes approximately 48 hours. We recommend to run the 10 replicates in parallel in cluster using the bash script `run_test_seizure_new6.sh` . Results for each run will be stored in `ApplicationSeizure/Results`, and the mean and standard deviation can be obtained by running `post_analysis_seizure_results6.py` in the directory. 
+Table 5 is the testing results for the chosen segment, which can be obtained by running `main_test_seizure.R`. The results reported are mean and standard deviation based off 10 runs. Each run takes approximately 12-24 hours depending on the length of network time series. We recommend to run the 10 replicates in parallel in cluster using the bash script `run_test_seizure_bipolar_fdr.sh` . Results for each run will be stored in `ApplicationSeizure/Results`, and the mean and standard deviation can be obtained by running `post_analysis_seizure_results_bipolar_fdr.py` in the directory. 
 
 
-
-
-
-### 
